@@ -41,8 +41,8 @@
 )
 
 = Introduction
-In today's world, Communication gaps between hearing and hearing-impaired individuals are still a big challenge especially during fast-paced, real-time interactions like video calls. Most current systems either support just one language or only focus on gesture input, leaving out voice and text in other local languages. With the rise of remote communication, there’s a growing need for tools that can bridge language and accessibility gaps on the fly. But existing system supports only international language such as English, French, etc., Because of this, Indian peoples are not able to use the system. Indian Languages are not supported in the existing system
-@netwok2020 @netwok2022.
+In today's world, Communication gaps between hearing and hearing-impaired individuals are still a big challenge especially during fast-paced, real-time interactions like video calls. Most current systems either support just one language or only focus on gesture input, leaving out voice and text in other local languages. With the rise of remote communication, there’s a growing need for tools that can bridge language and accessibility gaps on the fly. But existing system supports only international language such as English, French, etc., Because of this, Indian peoples are not able to use the system. Indian Languages are not supported in the existing system 
+
 
 == Paper overview
 
@@ -98,14 +98,14 @@ This dual approach ensures both flexibility and realism, allowing developers to 
  Data is collected through webcam and stored manually in a database. These image data is not only collected from webcam alone but inorder to train with high accuracy, is used from a self generated dataset. This dataset is used to process/train so that it can also act as a multilingual dataset format. This dataset ensures that the input can be given in almost any language. 
 
 
-#image("recording-off.png",width: 75%)
+ #align(center,image("recording-off.png",width: 75%))
 
 ==== i) 
 Data not being collected when the Recording 
 is turned 'OFF'
  
 
-#image("recording-on.png", width: 75%)
+#align(center,image("recording-on.png", width: 75%))
 
 ==== ii)
 Data is being collected when the Recording is turned 'ON'
@@ -296,3 +296,149 @@ End
 
 == Model Training
  Training is done using GAN (Generative Adversial Network) Model. This encourages the input images to be converted into trained model that the computer 
+
+= Implementation Details
+
+This project implements a Generative Adversarial Network (GAN) using the PyTorch deep learning framework to generate realistic sign language gesture images. The GAN architecture is trained on a dataset of Indian Sign Language images, aiming to synthesize plausible gesture visuals conditioned on simple text prompts.
+
+== 1. Library Dependencies and Setup
+
+The implementation begins by importing necessary libraries:
+
+- `torch`, `torch.nn`, `torch.optim`: For defining and training neural network models.
+- `torchvision`: For image transformations, dataset utilities, and saving output images.
+- `os`, `gc`, `random`: For system management, garbage collection, and randomness.
+- Custom modules: `models.generator`, `models.discriminator`, and `utils.preprocessing` for data loading and embedding conversion.
+
+These tools collectively enable efficient GPU-based training using PyTorch’s dynamic computation graphs.
+
+== 2. Generator Architecture
+
+The Generator ($G$) is a neural network designed to map a latent noise vector (or an embedded text representation) into a 64×64 image mimicking a real sign language gesture. It follows a typical Deep Convolutional GAN (DCGAN) style:
+
+- Input: Random noise vector or text embedding $z$
+- Layers: A series of `ConvTranspose2d` (transposed convolutions) to upsample, followed by `BatchNorm2d` and `ReLU` activations.
+- Output: A 3-channel image passed through `Tanh` activation to normalize pixel values between [-1, 1].
+
+== 3. Discriminator Architecture
+
+The Discriminator ($D$) is a convolutional neural network trained to classify input images as either real (from the dataset) or fake (from the Generator):
+
+- Input: 3-channel image of size 64×64
+- Layers: Multiple `Conv2d` layers with `LeakyReLU` activations and `BatchNorm2d`
+- Output: A scalar probability through a `Sigmoid` function indicating the "realness" of the image
+
+== 4. Loss Function and Optimizers
+
+The models are trained using Binary Cross Entropy (BCE) Loss:
+
+- Discriminator Loss:
+
+  $$
+  \mathcal{L}_D = - \mathbb{E}_{x \sim p_{\text{data}}}[\log D(x)] - \mathbb{E}_{z \sim p_z}[\log (1 - D(G(z)))]
+  $$
+
+- Generator Loss:
+
+  $$
+  \mathcal{L}_G = - \mathbb{E}_{z \sim p_z}[\log D(G(z))]
+  $$
+
+These losses optimize the adversarial objective using the Adam optimizer, with a learning rate of 0.0002 and momentum parameters $(\beta_1 = 0.5, \beta_2 = 0.999)$.
+
+== 5. Data Loading and Preprocessing
+
+The dataset comprises real sign language gesture images. Images are:
+
+- Resized to 64×64 pixels
+- Converted to tensors
+- Normalized to have pixel values in [-1, 1]
+
+A `DataLoader` batches the dataset for efficient GPU training.
+
+ python
+transform = transforms.Compose([
+  transforms.Resize(64),
+  transforms.ToTensor(),
+  transforms.Normalize((0.5,), (0.5,))
+])
+
+
+
+#align(center,image("train1.png",width: 75%))
+
+  i) Model Training using GAN
+
+#align(center,image("train2.png",width: 75%))
+
+  ii) Trained Model Sample Output
+
+  
+#align(center,image("train3.png", width: 75%))
+
+  iii) Alphabets getting trained in Sign Language for Prediction
+
+
+= Testing And Outcome
+
+ During the testing phase, the system uses a webcam to capture real-time video, allowing users to interact naturally with hand gestures. These gestures are then recognized by a machine learning model that has been trained beforehand.
+
+The implementation starts by importing a few essential libraries:
+
+OpenCV (cv2) is used to access the webcam and display the video feed.
+
+NumPy helps with efficient numerical operations on arrays.
+
+MediaPipe provides powerful hand tracking and landmark detection tools.
+
+Joblib is used to load the pre-trained classifier and label encoder.
+
+Pandas helps in organizing landmark data into a format suitable for model input.
+
+The trained model, stored as a .pkl file, is loaded into the program. This model can be any common classifier like a Random Forest or Support Vector Machine (SVM) that has been trained to identify gestures based on the positions of hand landmarks. The label encoder is also loaded to convert the model’s numeric predictions into meaningful gesture names.
+
+Using MediaPipe’s Hands module, the system can detect up to two hands in a video frame and extract 21 landmark points per hand, each with three coordinates (x, y, z). If only one hand is detected, the system fills in zeros for the second hand, ensuring the input size remains consistent (126 values total).
+
+For every frame from the webcam:
+
+It is cropped into a square shape,
+
+Resized to 480×480 pixels,
+
+Flipped horizontally (for a mirror-like interaction), and
+
+Converted to RGB format before being processed.
+
+If a hand is detected, the landmarks are flattened into a list, converted to a DataFrame, and passed to the model for prediction. The predicted output is then decoded using the label encoder and displayed as text directly on the video feed.
+
+If no hands are detected, the message “No hand detected” is shown on the screen. This process runs in real-time and continues until the user presses the 'q' key to exit.
+
+The system is also designed to handle errors—such as issues with loading the model or making predictions—ensuring smooth and uninterrupted performance even in varied lighting or background conditions.
+
+#box(image("op.png", width: 40%)) #box(image("op (2).png", width: 40%))
+
+
+==== predicted images (output) given above
+
+
+
+
+= Conclusion & Future Scope
+
+In this project, we developed a real-time system that recognizes and interprets Indian Sign Language (ISL) gestures using a standard webcam and machine learning techniques. By combining MediaPipe's reliable hand tracking capabilities with a trained gesture classification model, the system can detect hand movements and convert them into readable text almost instantly. This interactive setup enhances communication for individuals who are speech or hearing impaired, allowing for more inclusive and accessible interactions. Live testing showed that the system performs well across different users and environments, and its modular design means it can be extended easily to support additional input methods like speech or text.
+
+While the system currently focuses on static gesture recognition, there are many exciting directions to explore in the future:
+
+- Recognizing Dynamic Gestures: To support full sentences and natural sign language, we aim to include models like LSTMs or 3D CNNs that can understand sequences of movements over time.
+- 
+- Multilingual Gesture Translation: Expanding the system to output text in regional Indian languages can help reach a broader group of users and break more communication barriers.
+- 
+- Gesture Output from Voice or Text: A future version could take spoken or typed input and translate it into sign language using avatars or generated gesture videos, making it a two-way tool.
+- 
+- Mobile Accessibility: By optimizing the system for mobile and edge devices, users could interact with it directly from their smartphones without needing an internet connection.
+- 
+- Emotion and Context Awareness: Adding the ability to detect emotions and context from user inputs could make the system’s responses more natural and meaningful.
+- 
+- 3D Avatar Integration: Instead of showing only text, a 3D avatar could perform the signs visually, making it easier for people who don't read text well or are more visually oriented.
+
+These future improvements aim to create a more complete and user-friendly tool that can truly assist in everyday communication for the deaf and hard-of-hearing community.
