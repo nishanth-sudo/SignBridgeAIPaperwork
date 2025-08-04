@@ -35,7 +35,7 @@
       email: "sidharthsnair003@gmail.com"
     )
   ),
-  index-terms: ("Scientific writing", "Typesetting", "Document creation", "Syntax"),
+  index-terms: ("Indian Sign Language (ISL)", "Real-time gesture recognition", "Multilingual accessibility", "MediaPipe","Generative Adversarial Networks (GAN)","Text-to-sign translation","Indic language support, Deep Q-Learning"),
   bibliography: bibliography("refs.bib"),
   figure-supplement: [Fig.],
 )
