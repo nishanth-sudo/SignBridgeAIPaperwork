@@ -41,7 +41,7 @@
 )
 
 = Introduction
-In today's world, Communication gaps between hearing and hearing-impaired individuals are still a big challenge especially during fast-paced, real-time interactions like video calls. Most current systems either support just one language or only focus on gesture input, leaving out voice and text in other local languages. With the rise of remote communication, there’s a growing need for tools that can bridge language and accessibility gaps on the fly. But existing system supports only international language such as English, French, etc., Because of this, Indian peoples are not able to use the system. Indian Languages are not supported in the existing system 
+In today's world, Communication gaps between hearing and hearing-impaired individuals are still a big challenge especially during fast-paced, real-time interactions like video calls. Most current systems either support just one language or only focus on gesture input, leaving out voice and text in other local languages. With the rise of remote communication, there’s a growing need for tools that can bridge language and accessibility gaps on the fly. But existing system supports only international language such as English, French, etc., Because of this, Indian peoples are not able to use the system. Indian Languages are not supported in the existing system [@vashisth2023hand]
 
 
 == Paper overview
@@ -53,9 +53,9 @@ This research presents a real-time, intelligent system designed to bridge the co
 = Literature Review 
 Communication between sign language users and non-signers has long presented a challenge, particularly in dynamic, real-world scenarios. While sign language serves as a vital tool for individuals who are speech and hearing impaired, its effectiveness is often limited by a lack of universal standards and support for multilingual interaction. Learners and users of sign language face additional difficulties due to fragmented learning tools, insufficient real-time translation systems, and the absence of comprehensive platforms that support both recognition and cross-language conversion.
 
-Early works in sign language recognition predominantly focused on static gesture classification using traditional computer vision techniques. However, these systems struggled with dynamic gesture sequences, scalability across sign languages, and real-time processing. With the advent of deep learning, researchers began employing Convolutional Neural Networks (CNN's) and Recurrent Neural Networks (RNN's) to improve the recognition of signs, especially at the alphabet and word level. Kaur and Kaur (2020) highlighted the effectiveness of CNN's in recognizing hand gestures, while newer approaches have explored hybrid models combining CNN's with LSTMs for temporal gesture tracking. 
+Early works in sign language recognition predominantly focused on static gesture classification using traditional computer vision techniques. However, these systems struggled with dynamic gesture sequences, scalability across sign languages, and real-time processing. With the advent of deep learning, researchers began employing Convolutional Neural Networks (CNN's) and Recurrent Neural Networks (RNN's) to improve the recognition of signs, especially at the alphabet and word level. Vashisth et al. (2023)  [@vashisth2023hand] highlighted the effectiveness of CNN's in recognizing hand gestures, while newer approaches have explored hybrid models combining CNN's with LSTMs for temporal gesture tracking. 
 
-More recent studies have shifted towards multimodal frameworks that integrate audio, text, and gesture-based inputs. For instance, Kothadiya et al. (2022) proposed “Deepsign,” a deep learning-based system that enables real-time detection of Indian Sign Language using LSTM-GRU networks. Mistree et al. (2023) further advanced this by developing a translation pipeline from ISL to multiple Indian languages using MobileNet-V2 and Neural Machine Translation (NMT), addressing the lack of regional language support.
+More recent studies have shifted towards multimodal frameworks that integrate audio, text, and gesture-based inputs. For instance, Kothadiya et al. (2022) [@kothadiya2022deepsign] proposed “Deepsign,” a deep learning-based system that enables real-time detection of Indian Sign Language using LSTM-GRU networks. Mistree et al. (2023) [@mistree2022] further advanced this by developing a translation pipeline from ISL to multiple Indian languages using MobileNet-V2 and Neural Machine Translation (NMT), addressing the lack of regional language support.
 
 The use of Natural Language Processing (NLP) and Automatic Speech Recognition (ASR) in tandem with sign recognition has gained traction as well. These systems allow users to input voice or text in their native language, which is then translated and rendered as sign gestures—either via animated avatars or pre-recorded clips. This bidirectional communication model greatly benefits non-signers, enhancing inclusivity during real-time interactions such as video calls.
 
@@ -74,28 +74,31 @@ A key feature of this system is its robust support for multiple languages. It is
 The system architecture is built on several advanced technologies that work in harmony to deliver real-time sign language translation:
 
 ==== Speech-to-Text Module
-At the front end of the pipeline, a powerful speech recognition engine—OpenAI’s Whisper—is utilized. This state-of-the-art model excels at transcribing audio inputs with remarkable accuracy, even in noisy environments or across various dialects. Whether a user is speaking in Tamil or English, the Whisper model ensures that the spoken words are accurately captured and converted into text.
+At the front end of the pipeline, a powerful speech recognition engine—OpenAI’s Whisper—is utilized as mentioned in Radford et al(2022) [@radford2022whisper]. This state-of-the-art model excels at transcribing audio inputs with remarkable accuracy, even in noisy environments or across various dialects. Whether a user is speaking in Tamil or English, the Whisper model ensures that the spoken words are accurately captured and converted into text.
 
 ==== Text Processing and Natural Language Understanding
 Once the speech is transcribed (or a text input is directly provided), the content undergoes several NLP-based transformations. This includes text normalization (removing unnecessary elements), grammar correction, semantic interpretation, and context extraction. These processes ensure that the intended meaning of the message is preserved and appropriately prepared for sign language conversion.
 
 ==== Language Identification and Routing
 A dedicated language detection layer is integrated into the pipeline to identify the language of the input, especially when it comes from text sources where no audio is available. This ensures that the appropriate linguistic and cultural context is applied before translation, which is crucial for accurate sign representation.
-
+Tetreault et al(2019) [@tetroault2019automatic]
 ==== Sign Language Generation
 The final processed output is translated into sign language gestures. This can be achieved in two ways:
 
 ===== Animated Avatars 
 3D avatars or digital characters perform the corresponding signs, mimicking human-like movements.
+Li et al. (2022) describe a system that converts speech to sign language via animated avatars, integrating speech-to-text, gloss generation, and visual rendering using avatar animation [@cai2022speech2sign].
 
 ===== Gesture Video Snippets 
 Alternatively, pre-recorded video clips of human signers demonstrating the gestures can be played in sequence.
+Kennaway et al. (2001) [@glauert2001virtual] introduced Virtual Human Signing, using expressive avatars driven by signing notation languages like SiGML, demonstrating early expressive sign language generation with avatars .
 
 This dual approach ensures both flexibility and realism, allowing developers to choose the most suitable output method based on user needs and available resources.
 
 
 == Data Collection
- Data is collected through webcam and stored manually in a database. These image data is not only collected from webcam alone but inorder to train with high accuracy, is used from a self generated dataset. This dataset is used to process/train so that it can also act as a multilingual dataset format. This dataset ensures that the input can be given in almost any language. 
+ Data is collected through webcam and stored manually in a database. These image data is not only collected from webcam alone but inorder to train with high accuracy as referred in Vashisth et al. (2023)
+ [@vashisth2023hand], is used from a self generated dataset. This dataset is used to process/train so that it can also act as a multilingual dataset format. This dataset ensures that the input can be given in almost any language.  
 
 
  #align(center,image("recording-off.png",width: 75%))
@@ -120,7 +123,7 @@ Data is being collected when the Recording is turned 'ON'
 
 === MediaPipe Hand Tracking
 
-MediaPipe helps computers see and understand your hands in real-time using just your regular camera. It spots your palm, then maps 21 key points on your fingers and wrist. This lets your computer know what gesture you're making, instantly and accurately.
+MediaPipe helps computers see and understand your hands in real-time using just your regular camera. It spots your palm, then maps 21 key points on your fingers and wrist. This lets your computer know what gesture you're making, instantly and accurately as seen in A.Sharma et al(2023) [@mediapipe2023cnn]  .
 
 
 Begin
@@ -165,7 +168,7 @@ End
 
 === CNN + LSTM
 
-This hybrid model combines CNNs for spatial feature extraction from video frames with Long Short-Term Memory (LSTM) networks for capturing temporal dynamics across multiple frames—ideal for recognizing dynamic gestures or sign sequences.
+This hybrid model combines CNNs for spatial feature extraction from video frames with Long Short-Term Memory (LSTM) networks for capturing temporal dynamics across multiple frames—ideal similar to how it was utilized in 2024 by Waghmare et al. (2024) [@waghmare2024deep] for recognizing dynamic gestures or sign sequences.
 
 
 Begin
@@ -204,9 +207,11 @@ Begin
 End
 
 
+
+Wav2Vec 2.0 is a self-supervised deep learning model developed by Facebook AI that learns speech representations directly from raw audio waveforms, allowing accurate speech-to-text conversion even with limited labeled data. Recent studies show that Wav2Vec 2.0 outperforms prior ASR systems with limited labeled data while setting new benchmarks on the Librispeech corpus [@baevski2020wav2vec]
+
 === MarianMT / IndicTrans2
 
-Wav2Vec 2.0 is a self-supervised deep learning model developed by Facebook AI that learns speech representations directly from raw audio waveforms, allowing accurate speech-to-text conversion even with limited labeled data.
 
 
 Begin
@@ -229,7 +234,8 @@ End
 
 === Rule-Based Sign Mapping
 
-A deterministic approach where specific signs are associated with predefined words or sentences, often using a database or lookup table. This is used to map translated text into sign language videos or avatar movements.
+A deterministic approach where specific signs are associated with predefined words or sentences, often using a database or lookup table. This is used to map translated text into sign language videos or avatar movements. Ghosh and Mamidi (2022) [@ghosh2022rulebased] present a rule‑based translation algorithm that converts English input text into Indian Sign Language glosses. Their method includes handling of multi‑word expressions and synonym substitution to ensure semantic accuracy, particularly when the target ISL vocabulary is limited. 
+
 
 Begin
   
@@ -248,7 +254,7 @@ End
 
 === Deep Q-Learning
 
-DQN is a reinforcement learning algorithm that learns optimal actions by approximating the Q-value function using deep neural networks. It's useful for systems that adapt or personalize over time based on feedback.
+DQN is a reinforcement learning algorithm that learns optimal actions by approximating the Q-value function using deep neural networks. It's useful for systems that adapt or personalize over time based on feedback, following the architecture proposed by Mnih et al. [@mnih2015human]
 
 
 
@@ -273,7 +279,8 @@ End
 
 === Tacotron 2
 
-Tacotron 2 is a deep neural network architecture for end-to-end text-to-speech synthesis. It converts input text to a spectrogram and uses WaveNet (or another vocoder) to produce natural-sounding speech.
+Tacotron 2 is a deep neural network architecture for end-to-end text-to-speech synthesis. It converts input text to a spectrogram and uses WaveNet (or another vocoder) to produce natural-sounding speech. [@shen2018natural].
+
 
 
 Begin
@@ -295,7 +302,7 @@ End
 
 
 == Model Training
- Training is done using GAN (Generative Adversial Network) Model. This encourages the input images to be converted into trained model that the computer 
+ Training is done using GAN (Generative Adversial Network) Model. This encourages the input images to be converted into trained model that the computer can use to further implement in training to recognize the alphabets for sign language classification.Our GAN-based training strategy follows the original objective proposed by Goodfellow et al. (2014) [@goodfellow2014generative] , where the generator learns to fool the discriminator while the discriminator learns to distinguish real versus synthetic images 
 
 = Implementation Details
 
@@ -314,11 +321,12 @@ These tools collectively enable efficient GPU-based training using PyTorch’s d
 
 == 2. Generator Architecture
 
-The Generator ($G$) is a neural network designed to map a latent noise vector (or an embedded text representation) into a 64×64 image mimicking a real sign language gesture. It follows a typical Deep Convolutional GAN (DCGAN) style:
+The Generator ($G$) is a neural network designed to map a latent noise vector (or an embedded text representation) into a 64×64 image mimicking a real sign language gesture. It follows a typical Deep Convolutional GAN (DCGAN) style as mentioned by  Waghmare et al. [@waghmare2024deep] in 2024:
 
 - Input: Random noise vector or text embedding $z$
 - Layers: A series of `ConvTranspose2d` (transposed convolutions) to upsample, followed by `BatchNorm2d` and `ReLU` activations.
 - Output: A 3-channel image passed through `Tanh` activation to normalize pixel values between [-1, 1].
+
 
 == 3. Discriminator Architecture
 
